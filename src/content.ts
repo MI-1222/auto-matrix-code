@@ -56,8 +56,10 @@ function handleUserPassword(studentId: string, password: string) {
       // 値の入力と送信
       idInput.value = studentId;
       passInput.value = password;
-      submitBtn.click();
-      console.log("学籍番号,パスワードの入力を完了");
+      setTimeout(() => {
+        submitBtn.click();
+        console.log("学籍番号,パスワードの入力を完了");
+      }, 500);
     } else {
       console.warn("STUDENT_ID, PASSWORD が取得できませんでした。");
     }
@@ -105,7 +107,9 @@ function handleMatrixCode(matrixCode: MatrixCode) {
         }
       }
     }
-    submitBtn.click();
-    console.log("マトリクスコードの入力を完了");
+    setTimeout(() => {
+      submitBtn.click();
+      console.log("マトリクスコードの入力を完了");
+    }, 500);
   });
 }
