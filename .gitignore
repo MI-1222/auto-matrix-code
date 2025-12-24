@@ -25,3 +25,4 @@ dist-ssr
 
 # 実際のマトリクスコード
 config.secret.ts
+src/native-host/com.my.native_host.json
