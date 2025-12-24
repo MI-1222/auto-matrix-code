@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Matrix Code",
+  "version": "0.1.0",
+  "description": "東工大ポータルの自動入力",
+  "permissions": ["activeTab", "scripting"],
+  "commands": {
+    "run-automation": {
+      "suggested_key": {
+        "default": "Ctrl+M",
+        "mac": "Command+M"
+      },
+      "description": "東工大ポータルの自動入力コマンド"
+    }
+  },
+  "background": {
+    "service_worker": "content.js"
+  }
+}

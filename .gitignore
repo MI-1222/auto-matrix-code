@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # 実際のマトリクスコード
-config.matrix-code.ts
+config.secret.ts
