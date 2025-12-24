@@ -1,10 +1,6 @@
 import { STUDENT_ID, PASSWORD, MATRIX_CODE } from '../config.secret';
 
-console.log('拡張機能`Auto Matrix Code`が起動しました。');
-
-window.addEventListener('load', () => {
-  main();
-});
+main();
 
 function main() {
   const url = window.location.href;
