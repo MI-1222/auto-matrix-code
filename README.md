@@ -75,12 +75,15 @@ VSCodeなどで `src/native-host/com.my.native_host.json` を開き、以下の�
     * `node` コマンドのパスを指定しません（引数設定が不要なため）。
     * 例: `/Users/username/path/to/auto-matrix-code/src/native-host/wrapper.sh`
 
-### 4. ラッパースクリプトの設定と権限付与
+### 4. 環境変数の設定とラッパースクリプトへの権限付与
 
 スクリプトが正しくNode実行環境を見つけられるよう設定します。
 
-1. VSCodeなどで `src/native-host/wrapper.sh` を開く。
-2. `NODE_PATH` の行を探し、使用している **`node` コマンドの絶対パス** に書き換える。
+1. プロジェクトルートに `.env.example` をコピーして `.env` ファイルを作成する。
+    ```bash
+    cp .env.example .env
+    ```
+2. `.env` を開き、 `NODE_PATH` を使用している **`node` コマンドの絶対パス** に書き換える。
     * `which node` コマンドでパスを確認できます。
     * 例: `NODE_PATH="/Users/username/.nvm/versions/node/v23.5.0/bin/node"`
 3. 実行権限を付与する。
@@ -101,7 +104,7 @@ ln -nfsv $(pwd)/src/native-host/com.my.native_host.json ~/Library/Application\ S
 以下のコマンドを編集し、ターミナルで実行して自身の情報を登録する。JSON形式で1行の文字列として登録する必要がある。
 
 ```bash
-security add-generic-password -a "mi1222" -s "auto-matrix-code-secret" -w '{"STUDENT_ID":"あなたの学籍番号","PASSWORD":"あなたのパスワード","MATRIX_CODE":[["コードA1","コードA2",...],["コードB1",...]]}'
+security add-generic-password -a "$USER" -s "auto-matrix-code-secret" -w '{"STUDENT_ID":"あなたの学籍番号","PASSWORD":"あなたのパスワード","MATRIX_CODE":[["コードA1","コードA2",...],["コードB1",...]]}'
 ```
 
 * `MATRIX_CODE`: `string[][]` 型。10行7列で、`A`行から`J`行、`1`列から`7`列に対応。

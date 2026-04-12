@@ -13,13 +13,22 @@ echo "Starting Native Host wrapper at $(date)" >&2
 echo "User: $(whoami)" >&2
 echo "Directory: $(pwd)" >&2
 
-# 環境変数からNodeパスを明示的に設定
-NODE_PATH="/Users/mi1222/.nvm/versions/node/v23.5.0/bin/node"
-
 # コンパイル済みhost.cjsへの絶対パス解決
 # ラッパーがsrc/native-host/、host.cjsがdist/にあると仮定
 DIR="$(cd "$(dirname "$0")" && pwd)"
 HOST_SCRIPT="$DIR/../../dist/host.cjs"
+PROJECT_ROOT="$DIR/../../"
+
+# デフォルトのNode.jsパス
+NODE_PATH=$(which node)
+
+# .env ファイルが存在すれば読み込む
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  # export されていない変数もプロセス内で使えるように読み込む
+  set -a
+  source "$PROJECT_ROOT/.env"
+  set +a
+fi
 
 echo "Node Path: $NODE_PATH" >&2
 echo "Host Script: $HOST_SCRIPT" >&2
