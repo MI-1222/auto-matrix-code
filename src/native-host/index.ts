@@ -6,7 +6,13 @@ console.log = (...args: any[]) => {
   console.error(...args);
 };
 
-// 2. バッファリング付きの堅牢なメッセージ読み取り
+/** macOSキーチェーンで検索する際のアカウント名およびサービス名 */
+const KEYCHAIN_SERVICE_NAME = "auto-matrix-code-secret";
+
+/**
+ * 標準入力からバッファを利用してJSONメッセージを安全に読み取る。
+ * @returns {Promise<any>} パースされたメッセージオブジェクトを解決するPromise。
+ */
 function readMessage(): Promise<any> {
   return new Promise((resolve, reject) => {
     const stdin = process.stdin;
@@ -48,19 +54,17 @@ function readMessage(): Promise<any> {
       processBuffer();
     });
 
-    stdin.on('end', () => {
-      // Chromeによるpipe切断
-      if (expectedLength !== null && buffer.length < expectedLength) {
-      }
-    });
-    
+    stdin.on('end', () => {});
     stdin.on('error', (err) => {
        reject(err);
     });
   });
 }
 
-// stdoutへメッセージ書き込み
+/**
+ * 標準出力へ長さを付与したJSONメッセージを書き込み、Chrome拡張機能へ送信する。
+ * @param {any} msg - 送信するメッセージオブジェクト。
+ */
 function sendMessage(msg: any) {
   const buffer = Buffer.from(JSON.stringify(msg));
   const header = Buffer.alloc(4);
@@ -69,6 +73,10 @@ function sendMessage(msg: any) {
   process.stdout.write(buffer);
 }
 
+/**
+ * ネイティブホストのメイン処理。
+ * 標準入力からリクエストを受け取り、macOSのキーチェーンへアクセスして認証情報を返す。
+ */
 async function main() {
   process.on('uncaughtException', (err) => {
     console.error('未捕捉のエラー:', err);
@@ -80,23 +88,23 @@ async function main() {
     const message = await readMessage();
 
     if (message.type === 'GET_SECRET') {
-    try {
-      // macOSキーチェーン アクセス
-      const stdout = execSync(
-      'security find-generic-password -s "auto-matrix-code-secret" -w',
-      { stdio: ['ignore', 'pipe', 'pipe'] } // stderrの破棄防止
-      );
-      let jsonString = stdout.toString().trim();
-      // 末尾のカンマ削除
-      jsonString = jsonString.replace(/,(\s*[\]}])/g, '$1');
-      const secretData = JSON.parse(jsonString);
-      sendMessage({ success: true, data: secretData });
-    } catch (error: any) {
-      const errorMessage = error.message || String(error);
-      const stderr = error.stderr ? error.stderr.toString() : '';
-      console.error('キーチェーンエラー:', errorMessage, stderr); 
-      sendMessage({ success: false, error: 'キーチェーンアクセス失敗', details: errorMessage });
-    }
+      try {
+        // macOSキーチェーン アクセス
+        const stdout = execSync(
+          `security find-generic-password -s "${KEYCHAIN_SERVICE_NAME}" -w`,
+          { stdio: ['ignore', 'pipe', 'pipe'] } // stderrの破棄防止
+        );
+        let jsonString = stdout.toString().trim();
+        // 末尾のカンマ削除
+        jsonString = jsonString.replace(/,(\s*[\]}])/g, '$1');
+        const secretData = JSON.parse(jsonString);
+        sendMessage({ success: true, data: secretData });
+      } catch (error: any) {
+        const errorMessage = error.message || String(error);
+        const stderr = error.stderr ? error.stderr.toString() : '';
+        console.error('キーチェーンエラー:', errorMessage, stderr); 
+        sendMessage({ success: false, error: 'キーチェーンアクセス失敗', details: errorMessage });
+      }
     }
   } catch (err: any) {
     console.error('致命的なエラー:', err);
