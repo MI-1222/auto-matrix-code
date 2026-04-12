@@ -76,13 +76,11 @@ function handleMatrixCode(matrixCode: MatrixCode) {
   rows.forEach(rowIndex => {
     const thSelector = `#authentication > tbody > tr:nth-child(${rowIndex}) > th:nth-child(1)`;
     const inputSelector = `#authentication > tbody > tr:nth-child(${rowIndex}) > td > input[type=password]`;
-    const submitBtnSelector = '#authentication > tbody > tr:nth-child(9) > td > input[type=submit]:nth-child(1)';
 
     const th = document.querySelector(thSelector);
     const input = document.querySelector(inputSelector) as HTMLInputElement;
-    const submitBtn = document.querySelector(submitBtnSelector) as HTMLInputElement;
 
-    if (th && input && submitBtn) {
+    if (th && input) {
       const label = th.textContent?.trim(); // e.g. "[A,1]"
       console.log(`${rowIndex}行目のラベル: ${label}`);
 
@@ -100,16 +98,21 @@ function handleMatrixCode(matrixCode: MatrixCode) {
              const val = matrixCode[charIndex][numIndex];
              // 値の入力
              input.value = val;
-             console.log(`【入力】[${char},${num}]: ${val}`);
+             console.log(`【入力】[${char},${num}]`);
           } else {
             console.error(`[${char},${num}]が見つかりませんでした。`);
           }
         }
       }
     }
+  });
+
+  const submitBtnSelector = '#authentication > tbody > tr:nth-child(9) > td > input[type=submit]:nth-child(1)';
+  const submitBtn = document.querySelector(submitBtnSelector) as HTMLInputElement;
+  if (submitBtn) {
     setTimeout(() => {
       submitBtn.click();
       console.log("マトリクスコードの入力を完了");
     }, 500);
-  });
+  }
 }
