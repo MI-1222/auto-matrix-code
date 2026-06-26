@@ -115,3 +115,4 @@ security add-generic-password -a "$USER" -s "auto-matrix-code-secret" -w '{"STUD
 
 * 初回実行時: 拡張機能がネイティブホストを呼び出す際、macOSがアクセス許可を求めてくる場合がある。「常に許可」または「許可」を選択すること。
 * ログ確認: 動作しない場合、`/tmp/amc_native_host.log` にログが出力されるため確認すること。
+* ショートカット設定: キーボードショートカットで起動しない場合は、Chromeで `chrome://extensions/shortcuts` を開き、本拡張機能のショートカットが正しく割り当てられているか確認すること。
