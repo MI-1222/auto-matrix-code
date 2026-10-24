@@ -47,8 +47,8 @@
 ### 1. 依存関係のインストールとビルド
 
 ```bash
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 これにより `dist/` ディレクトリに拡張機能本体と `host.cjs` が生成されます。
 

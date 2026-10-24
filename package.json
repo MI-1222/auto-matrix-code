@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run build:host",
+    "build": "tsc && vite build && pnpm run build:host",
     "build:host": "esbuild src/native-host/index.ts --bundle --platform=node --format=cjs --outfile=dist/host.cjs",
     "preview": "vite preview"
   },
   "devDependencies": {
     "@types/chrome": "^0.1.32",
     "@types/node": "^25.0.3",
+    "esbuild": "^0.28.2",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
